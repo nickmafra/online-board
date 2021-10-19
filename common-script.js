@@ -103,3 +103,7 @@ function serialize(state) {
 	}*/
 	return rawState;
 }
+
+function resetState() {
+	boardStateStorage.saveParsed(boardInfo.defaultState);
+}

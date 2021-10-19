@@ -43,6 +43,10 @@ class BoardStorage {
 		return true;
 	}
 	
+	saveParsed(state) {
+		this.save(this.serialize(state));
+	}
+	
 	loadParsedChange() {
 		var change = this.loadChange();
 		return change === false ? false : this.deserialize(change);

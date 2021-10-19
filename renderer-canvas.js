@@ -7,6 +7,7 @@ class BoardRenderer {
 		this.boardState = boardStateStorage.loadParsedChange();
 		this.delay = 200;
 		this.stoped = false;
+		this.updateId = null;
 		this.pointer = {
 			down: false,
 			objIndex: -1,
@@ -27,6 +28,7 @@ class BoardRenderer {
 	}
 
 	start() {
+		console.log("starting renderer...");
 		this.loadImages();
 		
 		this.stoped = false;
@@ -71,13 +73,14 @@ class BoardRenderer {
 		if (changed)
 			this.draw();
 		
-		setTimeout(() => this.update(), this.delay);
+		this.updateId = setTimeout(() => this.update(), this.delay);
 	}
 	
 	stop() {
-		if (this.interval != null) {
-			clearInterval(this.interval);
-			this.interval = null;
+		console.log("stoping renderer...");
+		if (this.updateId != null) {
+			clearTimeout(this.updateId);
+			this.updateId = null;
 		}
 		this.stoped = true;
 	}
