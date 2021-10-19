@@ -6,17 +6,17 @@
 	"assets":[{
 		"name":"w",
 		"type":"image",
-		"src":"assets/red.png",
+		"src":"https://nickmafra.github.io/online-board/checkers/assets/red.png",
 		"size": {"width":64,"height":64}
 	},{
 		"name":"b",
 		"type":"image",
-		"src":"assets/black.png",
+		"src":"https://nickmafra.github.io/online-board/checkers/assets/black.png",
 		"size": {"width":64,"height":64}
 	},{
 		"name":"bg",
 		"type":"image",
-		"src":"assets/board.png",
+		"src":"https://nickmafra.github.io/online-board/checkers/assets/board.png",
 		"size": {"width":512,"height":512}
 	}],
 	"objects":[

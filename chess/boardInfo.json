@@ -6,7 +6,7 @@
 	"assets":[{
 		"name":"bg",
 		"type":"image",
-		"src":"./board.jpg",
+		"src":"https://nickmafra.github.io/online-board/chess/board.jpg",
 		"size": {"width":540,"height":540}
 	},{
 		"name":"bd",

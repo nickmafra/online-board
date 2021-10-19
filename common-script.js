@@ -19,11 +19,15 @@ function load() {
 	var appKey = findGetParameter("appKey");
 	if (appKey == null || appKey == "") {
 		appKey = "tcob" + Math.floor(Math.random() * 1000000);
-		window.location.href = window.location.href + (window.location.search || '?') + "appKey=" + appKey;
+		window.location.href = window.location.href + (window.location.search == "" ? "?" : "&") + "appKey=" + appKey;
 	}
 	boardStateStorage = new BoardStorage(appKey, "boardState");
 	boardStateStorage.serialize = serialize;
 	boardStateStorage.deserialize = deserialize;
+	
+	var boardInfoRef = findGetParameter("boardInfo");
+	if (boardInfoRef == null || boardInfoRef == "")
+		boardInfoRef = "boardInfo.json";
 	
 	var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
@@ -38,7 +42,7 @@ function load() {
             afterLoadBoardInfo();
 		}
     }
-    xmlHttp.open("GET", "boardInfo.json", true); // true for asynchronous
+    xmlHttp.open("GET", boardInfoRef, true); // true for asynchronous
     xmlHttp.send(null);
 }
 
