@@ -41,6 +41,10 @@ function afterLoadBoardInfo(boardInfo) {
 }
 
 function deserialize(rawState) {
+	if (rawState == null || rawState == "") {
+		// default state
+		rawState = "195,448;389,379;260,377;131,377;66,444;510,384;449,316;320,321;195,318;65,321;446,444;322,447;509,128;384,128;259,130;130,131;512,-1;444,66;382,2;320,65;257,1;194,68;127,3;66,64;|";
+	}
 	console.log("rawState: " + rawState);
 	var parts = rawState.split("|");
 	var pieces = parts[0].split(";");
