@@ -15,6 +15,7 @@ function findGetParameter(parameterName) {
 }
 
 function load() {
+	console.log("loading...");
 	var appKey = findGetParameter("appKey");
 	if (appKey == null || appKey == "") {
 		appKey = "tcob" + Math.floor(Math.random() * 1000000);

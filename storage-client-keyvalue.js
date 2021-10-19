@@ -30,6 +30,10 @@ class BoardStorage {
 		return state == lastState ? false : state;
 	}
 	
+	loadParsed() {
+		return this.deserialize(this.load());
+	}
+	
 	saveChange(state) {
 		if (state == this.lastState) {
 			return false;
