@@ -94,6 +94,10 @@ class BoardRenderer {
 	
 	draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		if (this.boardInfo.params.hasOwnProperty("bgColor")) {
+			this.ctx.fillStyle = this.boardInfo.params.bgColor;
+			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		}
 		
 		for (var i = 0; i < this.boardInfo.objects.length; i++) {
 			var objInfo = this.boardInfo.objects[i];
