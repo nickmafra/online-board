@@ -51,7 +51,6 @@ function afterLoadBoardInfo() {
 	
 	qtPieces = boardInfo.objects.length - 1; // 0 is bg
 	renderer = new BoardRenderer(canvas, boardInfo, boardStateStorage);
-	renderer.delay = 200;
 	renderer.start();
 }
 

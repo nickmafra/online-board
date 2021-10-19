@@ -5,14 +5,18 @@ class BoardRenderer {
 		this.boardInfo = boardInfo;
 		this.boardStateStorage = boardStateStorage;
 		this.boardState = boardStateStorage.loadParsedChange();
-		this.delay = 200;
+		this.fps = 50;
+		this.lastUpdate = 0;
+		this.maxDelay = 1000;
+		this.minDelay = 200;
 		this.stoped = false;
 		this.updateId = null;
 		this.pointer = {
 			down: false,
 			objIndex: -1,
 			position: {x:0,y:0},
-			lastPosition: {x:null,y:null}
+			lastPosition: {x:null,y:null},
+			lastObjIndex: -1
 		}
 		this.lastAction = null;
 		this.images = [];
@@ -32,6 +36,11 @@ class BoardRenderer {
 		this.loadImages();
 		
 		this.stoped = false;
+		this.pointer.objIndex = -1;
+		this.lastUpdate = 0;
+		this.lastAction = null;
+		this.boardStateStorage.lastState = null;
+		this.lastChanged = false;
 		this.update();
 	}
 	
@@ -40,6 +49,10 @@ class BoardRenderer {
 			return;
 		
 		var changed = false;
+		var importantChange = false;
+		var now = Date.now();
+		var needUpdate = now - this.lastUpdate >= (this.lastChanged ? this.minDelay : this.maxDelay);
+		var forceLoad = this.lastAction == "save" && !this.pointer.down;
 		
 		if (this.pointer.objIndex >= 0) {
 			var objState = this.boardState.objects[this.pointer.objIndex];
@@ -49,31 +62,37 @@ class BoardRenderer {
 			objState.position.x = Math.round(this.pointer.position.x - size.width / 2);
 			objState.position.y = Math.round(this.pointer.position.y - size.height / 2);
 		}
-		if (this.pointer.down && this.pointer.position.x != this.pointer.lastPosition.x || this.pointer.position.y != this.pointer.lastPosition.y) {
-			this.pointer.lastPosition = this.pointer.position;
+		if (this.pointer.objIndex != this.pointer.lastObjIndex) {
+			importantChange = true;
+			changed = true;
+		}
+		if (this.pointer.objIndex >= 0 && this.pointer.position.x != this.pointer.lastPosition.x || this.pointer.position.y != this.pointer.lastPosition.y) {
 			changed = true;
 		}
 		
-		if (changed) {
+		if (importantChange || changed && needUpdate) {
+			this.pointer.lastObjIndex = this.pointer.objIndex;
+			this.pointer.lastPosition = this.pointer.position;
+			this.lastUpdate = now;
 			this.boardStateStorage.saveParsedChange(this.boardState);
 			this.lastAction = "save";
-		} else {
-			var stateChange = this.lastAction == "save"
-					? this.boardStateStorage.loadParsed()
-					: this.boardStateStorage.loadParsedChange();
+		} else if (forceLoad || needUpdate) {
+			this.lastUpdate = now;
+			var stateChange = forceLoad
+				? this.boardStateStorage.loadParsed()
+				: this.boardStateStorage.loadParsedChange();
 			if (!(stateChange === false)) {
 				this.boardState = stateChange;
 				changed = true;
-				this.lastAction = "load";
-			} else {
-				this.lastAction = null;
 			}
+			this.lastAction = "load";
 		}
 		
 		if (changed)
 			this.draw();
 		
-		this.updateId = setTimeout(() => this.update(), this.delay);
+		this.lastChanged = changed;
+		this.updateId = setTimeout(() => this.update(), 1000 / this.fps);
 	}
 	
 	stop() {
